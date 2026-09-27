@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Online Chatbot Ticketing System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<nav>
+    <div class="logo">TicketBot</div>
+    <div>
+        <a href="/">Home</a>
+        <a href="/ticket">Create Ticket</a>
+        <a href="/tickets">View Tickets</a>
+    </div>
+</nav>
+
+<div class="container">
+    <section class="hero">
+        <h1>Online Chatbot Based Ticketing System</h1>
+        <p>A simple student project for handling customer queries and support tickets.</p>
+        <a class="btn" href="/ticket">Create a Ticket</a>
+    </section>
+
+    <section class="card">
+        <h2>Chatbot Support</h2>
+        <div id="chatbox" class="chatbox">
+            <div class="bot">Bot: Hello! Ask me about tickets, payment, login, refund or support.</div>
+        </div>
+
+        <form id="chat-form">
+            <input type="text" id="message" placeholder="Type your question..." required>
+            <button type="submit">Send</button>
+        </form>
+    </section>
+
+    <section class="features">
+        <div class="small-card">
+            <h3>💬 Chatbot</h3>
+            <p>Answers common support questions using simple keyword matching.</p>
+        </div>
+        <div class="small-card">
+            <h3>🎫 Ticket Creation</h3>
+            <p>Users can submit their problem and receive a ticket number.</p>
+        </div>
+        <div class="small-card">
+            <h3>📋 Ticket Management</h3>
+            <p>Tickets can be viewed and their status can be changed.</p>
+        </div>
+    </section>
+</div>
+
+<script>
+document.getElementById("chat-form").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const input = document.getElementById("message");
+    const chatbox = document.getElementById("chatbox");
+    const message = input.value.trim();
+
+    if (!message) return;
+
+    chatbox.innerHTML += '<div class="user">You: ' + message + '</div>';
+
+    const formData = new FormData();
+    formData.append("message", message);
+
+    const response = await fetch("/chat", {
+        method: "POST",
+        body: formData
+    });
+
+    const data = await response.json();
+    chatbox.innerHTML += '<div class="bot">Bot: ' + data.reply + '</div>';
+
+    input.value = "";
+    chatbox.scrollTop = chatbox.scrollHeight;
+});
+</script>
+</body>
+</html>

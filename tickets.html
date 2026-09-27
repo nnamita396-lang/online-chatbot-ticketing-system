@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tickets</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<nav>
+    <div class="logo">TicketBot</div>
+    <div>
+        <a href="/">Home</a>
+        <a href="/ticket">Create Ticket</a>
+        <a href="/tickets">View Tickets</a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="card">
+        <h1>Ticket List</h1>
+
+        {% if tickets %}
+        <div class="table-wrapper">
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Issue</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th>Action</th>
+            </tr>
+
+            {% for ticket in tickets %}
+            <tr>
+                <td>#{{ ticket['id'] }}</td>
+                <td>{{ ticket['name'] }}</td>
+                <td>{{ ticket['category'] }}</td>
+                <td>{{ ticket['issue'] }}</td>
+                <td><span class="status">{{ ticket['status'] }}</span></td>
+                <td>{{ ticket['created_at'] }}</td>
+                <td>
+                    <a href="/update/{{ ticket['id'] }}/In%20Progress">Progress</a> |
+                    <a href="/update/{{ ticket['id'] }}/Closed">Close</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        </div>
+        {% else %}
+            <p>No tickets have been created yet.</p>
+        {% endif %}
+    </div>
+</div>
+</body>
+</html>
